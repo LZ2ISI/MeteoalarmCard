@@ -24,12 +24,15 @@ export default class NINA implements MeteoalarmIntegration {
 			type: MeteoalarmIntegrationEntityType.Slots,
 			returnHeadline: true,
 			returnMultipleAlerts: true,
-			entitiesCount: 0
+			entitiesCount: 0,
+			monitoredConditions: [
+				MeteoalarmEventType.Unknown
+			]
 		};
 	}
 
 	public supports(entity: NinaEntity): boolean {
-		// Nina doesn't regally provide a good way of verification
+		// Nina doesn't really provide a good way of verification
 		return ['on', 'off'].includes(entity.state);
 	}
 

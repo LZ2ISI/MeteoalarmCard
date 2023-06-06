@@ -1,21 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { LitElement, html, TemplateResult, css, CSSResultGroup } from 'lit';
-import { HomeAssistant, fireEvent, LovelaceCardEditor, EntityConfig } from 'custom-card-helpers';
-
 import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
-import { MeteoalarmCardConfig, MeteoalarmIntegrationEntityType, MeteoalarmScalingMode } from './types';
+import { EntityConfig, fireEvent, HomeAssistant, LovelaceCardEditor } from 'custom-card-helpers';
+import { css, CSSResultGroup, html, LitElement, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators';
 import { formfieldDefinition } from '../elements/formfield';
 import { selectDefinition } from '../elements/select';
 import { switchDefinition } from '../elements/switch';
 import { textfieldDefinition } from '../elements/textfield';
-import { MeteoalarmCard } from './meteoalarm-card';
-import { localize } from './localize/localize';
-import { processEditorEntities } from './process-editor-entities';
 import { generateEditorWarnings } from './editor-warnings';
+import { processEditorEntities } from './helpers/process-editor-entities';
+import { localize } from './localize/localize';
+import { MeteoalarmCard } from './meteoalarm-card';
+import { MeteoalarmCardConfig, MeteoalarmIntegrationEntityType, MeteoalarmScalingMode } from './types';
 
 @customElement('meteoalarm-card-editor')
-export class BoilerplateCardEditor extends ScopedRegistryHost(LitElement) implements LovelaceCardEditor {
+export class MeteoalarmCardCardEditor extends ScopedRegistryHost(LitElement) implements LovelaceCardEditor {
   @property({ attribute: false }) public hass?: HomeAssistant;
   @state() private _config?: MeteoalarmCardConfig;
   @state() private _helpers?: any;
@@ -117,8 +116,8 @@ export class BoilerplateCardEditor extends ScopedRegistryHost(LitElement) implem
 				${integration?.metadata.type == MeteoalarmIntegrationEntityType.Slots ? html`
 					${localize('editor.description.slots')}</p>
 				` : ''}
-				${integration?.metadata.type == MeteoalarmIntegrationEntityType.WarningWatchStatement ? html`
-					${localize('editor.description.warning_watch_statement')}</p>
+				${integration?.metadata.type == MeteoalarmIntegrationEntityType.WarningWatchStatementAdvisory  ? html`
+					${localize('editor.description.warning_watch_statement_advisory')}</p>
 				` : ''}
 				${integration?.metadata.type == MeteoalarmIntegrationEntityType.SeparateEvents ? html`
 					${localize('editor.description.separate_events')}</p>

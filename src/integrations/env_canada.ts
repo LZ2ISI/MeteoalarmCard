@@ -17,7 +17,8 @@ type EnvCanadaEntity = HassEntity & {
 export enum EnvCanadaEntityType {
 	Warning,
 	Watch,
-	Statement
+	Statement,
+	Advisory
 }
 
 const ATTRIBUTION_EN = 'Data provided by Environment Canada';
@@ -28,10 +29,11 @@ export default class EnvironmentCanada implements MeteoalarmIntegration {
 		return {
 			key: 'env_canada',
 			name: 'Environment Canada',
-			type: MeteoalarmIntegrationEntityType.WarningWatchStatement,
+			type: MeteoalarmIntegrationEntityType.WarningWatchStatementAdvisory,
 			returnHeadline: false,
 			returnMultipleAlerts: true,
-			entitiesCount: 3
+			entitiesCount: 4,
+			monitoredConditions: [...new Set(this.eventTypes.map(e => e.type))]
 		};
 	}
 
@@ -170,6 +172,11 @@ export default class EnvironmentCanada implements MeteoalarmIntegration {
 				en: 'Special Weather',
 				fr: 'Météorologique Spécial',
 				type: MeteoalarmEventType.Unknown
+			},
+			{
+				en: 'Special Air Quality',
+				fr: 'Qualité de l\'air',
+				type: MeteoalarmEventType.AirQuality
 			}
 		];
 	}
@@ -192,6 +199,11 @@ export default class EnvironmentCanada implements MeteoalarmIntegration {
 				type: EnvCanadaEntityType.Statement,
 				en: 'Statement',
 				fr: 'Bulletin'
+			},
+			{
+				type: EnvCanadaEntityType.Advisory,
+				en: 'Advisory',
+				fr: 'Avis De'
 			}
 		];
 	}
@@ -205,8 +217,11 @@ export default class EnvironmentCanada implements MeteoalarmIntegration {
 	private praseAlertName(alertName: string, type: EnvCanadaEntityType, isFrench: boolean) {
 		const prefixTranslation = this.entityTypeTranslation.find(t => t.type == type)!;
 		const prefix = isFrench ? prefixTranslation.fr : prefixTranslation.en;
-		if(!alertName.includes(prefix)) throw new Error(`Translated event prefix was not found in alert name '${prefix}' (isFrench=${isFrench})`);
-		alertName = alertName.replace(prefix, '') .trim();
+
+		if(!alertName.includes(prefix)) {
+			throw new Error(`Translated event prefix was not found in alert name '${prefix}' (isFrench=${isFrench})`);
+		}
+		alertName = alertName.replace(prefix, '').trim();
 
 		return this.eventTypes.find(e => {
 			return (
@@ -242,14 +257,22 @@ export default class EnvironmentCanada implements MeteoalarmIntegration {
 	}
 
 	private getEntityType(entity: HassEntity): EnvCanadaEntityType | undefined {
-		if(entity.entity_id.endsWith('warnings') && entity.attributes.friendly_name?.endsWith('Warnings')) {
-			return EnvCanadaEntityType.Warning;
-		}
-		else if(entity.entity_id.endsWith('watches') && entity.attributes.friendly_name?.endsWith('Watches')) {
-			return EnvCanadaEntityType.Watch;
-		}
-		else if(entity.entity_id.endsWith('statements') && entity.attributes.friendly_name?.endsWith('Statements')) {
-			return EnvCanadaEntityType.Statement;
+		// It's actually a sketchy solution to this, entity type can be detected by
+		// entity_id or friendly_name so it loops thought both of them
+		for(const attribute of [ entity.entity_id, entity.attributes.friendly_name?.toLocaleLowerCase() ]) {
+			if(!attribute) continue;
+			if(attribute.includes('warnings')) {
+				return EnvCanadaEntityType.Warning;
+			}
+			else if(attribute.includes('watches')) {
+				return EnvCanadaEntityType.Watch;
+			}
+			else if(attribute.includes('statements')) {
+				return EnvCanadaEntityType.Statement;
+			}
+			else if(attribute.includes('advisory')) {
+				return EnvCanadaEntityType.Advisory;
+			}
 		}
 		return undefined;
 	}
@@ -261,7 +284,7 @@ export default class EnvironmentCanada implements MeteoalarmIntegration {
 		else if(type == EnvCanadaEntityType.Watch) {
 			return MeteoalarmLevelType.Orange;
 		}
-		else if(type == EnvCanadaEntityType.Statement) {
+		else if(type == EnvCanadaEntityType.Statement || type == EnvCanadaEntityType.Advisory) {
 			return MeteoalarmLevelType.Yellow;
 		}
 		else {

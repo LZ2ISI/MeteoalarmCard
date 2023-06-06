@@ -2,40 +2,57 @@ name: Bug report
 description: Create a report to help us improve
 labels: [bug]
 body:
+
 - type: textarea
   attributes:
     label: Describe the bug
     description: A concise description of what you're experiencing.
   validations:
     required: true
+
 - type: textarea
   attributes:
-    label: Steps to reproduce
-    description: Steps to reproduce the behavior.
+    label: Integration state attributes 
     placeholder: |
-      1. Go to '...'
-      2. Click on '....'
-      3. Scroll down to '....'
-      4. See error
-  validations:
-    required: false
+      language: en-US
+      category: Met
+      event: Moderate alert for Wind
+      responseType: Monitor
+      urgency: Future
+      severity: Moderate
+      certainty: Likely
+      effective: 2023-05-18T00:00:00+02:00
+      onset: 2023-05-18T00:00:00+02:00
+      expires: 2023-05-18T10:59:00+02:00
+      headline:  Moderate alert for Wind
+      awareness_level: 2; yellow; Moderate
+      awareness_type: 1; Wind
+      attribution: Information provided by MeteoAlarm
+      device_class: safety
+    description: |
+      Please add state attributes of your integration in YAML. You can find them in your developer tools:
+      
+      [![Open your Home Assistant instance and show your state developer tools.](https://my.home-assistant.io/badges/developer_states.svg)](https://my.home-assistant.io/redirect/developer_states/)
+
 - type: textarea
   attributes:
     label: Screenshots
     description: |
-      If applicable, add:
-      - screenshots of your integration in HA developer tools
-      - screenshots of rendered card
-      - screenshots from your browser developer console
+     Please add screenshots to help us to diagnose the issue:
+      - screenshots of card in your Lovelace
+      - if it's error card [it looks like that](https://i.imgur.com/8COQUeo.png) please also provide screenshot from you's browser console showing the error
   validations:
-    required: false
+    required: true
+
 - type: markdown
   attributes:
     value: "## Environment"
+
 - type: markdown
   attributes:
     value: |
       Please provide information about current configuration that you are using.
+
 - type: input
   attributes:
     label: Card version
@@ -43,6 +60,33 @@ body:
     placeholder: v1.1.0
   validations:
     required: true
+
+- type: dropdown
+  attributes:
+    label: Installation type
+    options:
+      - Home Assistant Community Store (HACS)
+      - Manual
+      - Other
+
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Card Configuration
+    description: |
+      Please provide your Meteoalarm Card configuration in Dashboard
+    placeholder: |
+      type: custom:meteoalarm-card
+      integration: meteoalarm
+      entities:
+        - entity: binary_sensor.meteoalarm
+      override_headline: true
+
+  validations:
+    required: true
+
 - type: dropdown
   attributes:
     label: Integration type
@@ -57,34 +101,27 @@ body:
       - Other
   validations:
     required: true
+
 - type: dropdown
   attributes:
-    label: Installation type
+    label: Integration configuration
     options:
-      - Home Assistant Community Store (HACS)
-      - Manual
+      - YAML (configuration.yaml)
+      - GUI
       - Other
   validations:
     required: true
-- type: textarea
-  attributes:
-    label: Card Configuration
-    description: |
-      Please provide your Meteoalarm Card configuration in Dashboard
-    value: |
-      ```yaml
-      [PASTE CONFIGURATION HERE]
-      ```
-  validations:
-    required: true
+
 - type: textarea
   attributes:
     label: Integration Configuration
     description: |
-      Please provide your integration configuration from `configuration.yaml`
-    value: |
-      ```yaml
-      [PASTE CONFIGURATION HERE]
-      ```
+      If you have configured integration with YAML - Please provide your integration configuration from `configuration.yaml`.
+    placeholder: |
+      binary_sensor:
+        - platform: meteoalarm
+          language: "it"
+          country: "italy"
+          province: "Abruzzo" 
   validations:
-    required: true
+    required: false

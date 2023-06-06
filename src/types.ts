@@ -17,6 +17,8 @@ export interface MeteoalarmCardConfig extends LovelaceCardConfig {
   hide_caption?: boolean;
   disable_swiper?: boolean;
   scaling_mode?: string;
+  ignored_events?: string[];
+  ignored_levels?: string[];
 
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
@@ -37,6 +39,7 @@ export interface MeteoalarmIntegrationMetadata {
   entitiesCount:  number
   returnHeadline: boolean,
   returnMultipleAlerts: boolean,
+  monitoredConditions: MeteoalarmEventType[]
 }
 
 export enum MeteoalarmIntegrationEntityType {
@@ -48,19 +51,18 @@ export enum MeteoalarmIntegrationEntityType {
   // Alerts in this integration are split across multiple (probably unlimited amount) of entities
   // each one contains one warning
   Slots = 2,
-  // Alerts in this integration are split across exactly 3 entities
-  // Warnings entity contains red warnings
-  // Watch entity contains orange warnings
-  // Statement entity contains yellow warnings
-  WarningWatchStatement = 3,
+  // Alerts in this integration are split across exactly 4 entities: warnings, watches, statements, advisories
+  WarningWatchStatementAdvisory  = 3,
   // Alerts in this integration are split across multiple entities, count is strictly specified
   // Each warning is dedicated for one entity kind
   SeparateEvents = 4
 }
-
+/**
+ * Is the alert currently active or will be active in the future
+ * This is mostly used with type MeteoalarmIntegrationEntityType.CurrentExpected
+ */
 export enum MeteoalarmAlertKind {
-  // Is the alert currently active or will be active in the future
-  // This is mostly used with type MeteoalarmIntegrationEntityType.CurrentExpected
+
   Current = 0,
   Expected = 1
 }
@@ -81,18 +83,22 @@ export interface MeteoalarmAlert {
   _entity?: HassEntity
 }
 
-// Event transformed from MeteoalarmEvent used for rendering card
+/**
+ * Event transformed from MeteoalarmEvent used for rendering card
+ */
 export interface MeteoalarmAlertParsed {
+  /**
+   * Should this alert be shown when hide_when_no_warnings is enabled
+   */
   isActive: boolean,
-  entity: HassEntity,
   icon: string,
   color: string,
   headlines: string[],
   captionIcon?: string,
-  caption?: string
+  caption?: string,
+  entity?: HassEntity,
 }
 
-// This list is ordered how dangerous events are
 export enum MeteoalarmEventType {
   Unknown,
   Nuclear,
