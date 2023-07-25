@@ -124,6 +124,11 @@ export default class EnvironmentCanada implements MeteoalarmIntegration {
 				type: MeteoalarmEventType.Thunderstorms
 			},
 			{
+				en: 'Smog',
+				fr: 'Smog',
+				type: MeteoalarmEventType.AirQuality
+			},
+			{
 				en: 'Snowfall',
 				fr: 'Neige',
 				type: MeteoalarmEventType.SnowIce
@@ -175,7 +180,7 @@ export default class EnvironmentCanada implements MeteoalarmIntegration {
 			},
 			{
 				en: 'Special Air Quality',
-				fr: 'Qualité de l\'air',
+				fr: 'Spécial Sur La Qualité De L\'Air',
 				type: MeteoalarmEventType.AirQuality
 			}
 		];
