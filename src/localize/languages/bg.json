@@ -1,8 +1,8 @@
 {
   "$schema": "../schema/schema.json",
   "common": {
-    "name": "Meteoalarm Card",
-    "description": "Картата Meteoalarm Ви предупреждава за текущите метеорологични събития.",
+    "name": "Карта Meteoalarm",
+    "description": "Картата "Meteoalarm" Ви предупреждава за текущите метеорологични събития.",
     "warning": "Предупреждение",
     "expected": "Очаквано",
     "unavailable": {
