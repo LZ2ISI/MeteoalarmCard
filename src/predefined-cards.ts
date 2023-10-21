@@ -9,11 +9,8 @@ export class PredefinedCards {
 			isActive: true,
 			entity: undefined,
 			icon: 'cloud-question',
-			color: MeteoalarmData.getLevel(MeteoalarmLevelType.None).color,
-			headlines: [
-				localize('common.unavailable.long'),
-				localize('common.unavailable.short')
-			]
+			cssClass: MeteoalarmData.getLevel(MeteoalarmLevelType.None).cssClass,
+			headlines: [localize('common.unavailable.long'), localize('common.unavailable.short')],
 		};
 	}
 
@@ -22,11 +19,8 @@ export class PredefinedCards {
 			isActive: false,
 			entity: entity,
 			icon: 'shield-outline',
-			color: MeteoalarmData.getLevel(MeteoalarmLevelType.None).color,
-			headlines: [
-				localize('events.no_warnings')
-			]
+			cssClass: MeteoalarmData.getLevel(MeteoalarmLevelType.None).cssClass,
+			headlines: [localize('events.no_warnings')],
 		};
 	}
 }
-

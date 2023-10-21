@@ -110,7 +110,7 @@ Expect Meteoalarm this card supports many other integrations:
 | ----------------------------------- | ---------------- | ------------------------ |
 | [MeteoAlarm][meteoalarm]            | `meteoalarm`     | Warnings for Europe collected by [MeteoAlarm][meteoalarm-direct] (EUMETNET). The website integrates all important severe weather information originating from the official National Public Weather Services across a large number of European countries  |
 | [Météo-France][meteo-france]        | `meteofrance`    | Warnings for France from [Météo-France][meteo-france-direct]. |
-| [Deutscher Wetterdienst (DWD)][dwd] | `dwd`            | Warnings for Germany from [Dutscher Wetterdienst][dwd-direct]. |
+| [Deutscher Wetterdienst (DWD)][dwd] | `dwd`            | Warnings for Germany from [Deutscher Wetterdienst][dwd-direct]. |
 | [Environnement Canada][env-canada]  | `env_canada`     | Warnings for Canada from [Environment and Climate Change Canada][env-canada-direct]. |
 | [NINA][nina]                        | `nina`           | Warnings for Germany from [Bundesamt für Bevölkerungsschutz und Katastrophenhilfe][nina-direct]. This integration doesn't provide much atributes thus using it generates very generic card. |
 | [Burze.dzis.net][burze]             | `burze_dzis_net` | Custom integration for warnings in Poland from [Burze.dzis.net][burze-direct]. These warnings are issued by [Skywarn / Polscy Łowcy Burz ](https://lowcyburz.pl) which is not backed by government or any official agency. |
@@ -131,6 +131,35 @@ Expect Meteoalarm this card supports many other integrations:
 [burze-direct]: https://burze.dzis.net
 [weatheralerts]: https://github.com/custom-components/weatheralerts
 [weatheralerts-direct]: https://www.weather.gov
+
+## Customizing the Card's Appearance
+
+You can customize card appearance using provided CSS variables and [card-mod](https://github.com/thomasloven/lovelace-card-mod). For example:
+
+```yaml
+type: custom:meteoalarm-card
+entities:
+  entity: binary_sensor.meteoalarm
+integration: meteoalarm
+style: |
+  ha-card {
+    --inactive-background-color: blue;
+  }
+```
+
+Which produces result:
+
+![result](https://i.imgur.com/D0hZ86G.png)
+
+
+Below are the available CSS variables that you can modify:
+
+- `--text-color`: The text color of inactive card.
+- `--text-color-active`: The text color for card with active warnings.
+- `--red-level-color`: The background color for red level alerts.
+- `--orange-level-background-color`: The background color for orange level alerts.
+- `--yellow-level-background-color`: The background color for yellow-level alerts.
+- `--inactive-background-color`: This variable defines the background color when there are no warnings active.
 
 ## Contributing
 
